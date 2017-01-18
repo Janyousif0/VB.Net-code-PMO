@@ -1,0 +1,74 @@
+Imports WebSupergoo.ABCpdf8
+Imports WebSupergoo.ABCpdf8.Objects
+Imports WebSupergoo.ABCpdf8.Atoms
+Imports WebSupergoo.ABCpdf8.Operations
+Public Class Form1
+
+    Dim myBitmap As System.Drawing.Bitmap
+    Dim myGraphics As Graphics
+    Dim mySource As Rectangle
+    Dim myDestination As Rectangle
+    Dim i As String
+    Dim i2 As String
+    Dim c As Object
+    Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
+
+
+        Dim theDoc As Doc = New Doc()
+        
+        theDoc.Read(i)
+
+        theDoc.Rendering.DotsPerInch = 100
+        theDoc.PageNumber = 1
+
+        theDoc.Rect.String = theDoc.CropBox.String
+        theDoc.Rendering.Save(i2)
+
+
+        'create an instance of bitmap based on a file
+        myBitmap = New System.Drawing.Bitmap(i2)
+
+        'return the current form as a drawing surface
+
+        myGraphics = Graphics.FromHwnd(ActiveForm().Handle)
+
+        'define a rectangle as the size of the original image (source)
+        mySource = New Rectangle(x:=0, y:=0, Width:=0, Height:=0)
+
+        'draw the original bitmap to the source rectangle
+        myGraphics.DrawImage(image:=myBitmap, rect:=mySource)
+
+        'create a destination rectangle
+        myDestination = New Rectangle(x:=0, y:=0, Width:=0, Height:=0)
+
+        'output the image to the dest. rectangle (scale)
+        myGraphics.DrawImage(image:=myBitmap, rect:=myDestination)
+
+        'output a cropped portion of the source
+        myGraphics.DrawImage(image:=myBitmap, _
+          destRect:=New Rectangle(x:=100, y:=100, Width:=240, Height:=320), _
+          srcRect:=New Rectangle(x:=1600, y:=0, Width:=700, Height:=900), _
+          srcUnit:=GraphicsUnit.Pixel)
+        c = 1
+    End Sub
+
+    Private Sub Button2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button2.Click
+        i = "c:\vb\test1.pdf"
+        i2 = "c:\finaltest\jan2.jpg"
+    End Sub
+
+    Private Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+        i = "c:\vb\test2.pdf"
+        i2 = "c:\finaltest\jan.jpg"
+    End Sub
+
+   
+    Private Sub Timer1_Tick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Timer1.Tick
+        If c = 1 Then
+            myGraphics.DrawImage(image:=myBitmap, _
+                     destRect:=New Rectangle(x:=100, y:=100, Width:=240, Height:=320), _
+                     srcRect:=New Rectangle(x:=1600, y:=0, Width:=700, Height:=900), _
+                     srcUnit:=GraphicsUnit.Pixel)
+        End If
+    End Sub
+End Class
